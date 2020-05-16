@@ -100,8 +100,6 @@ function start() {
         var msg = evt.data;
         if (msg.endsWith('\n')) {
             lastTrans.innerText = imcompleteTrans + msg.substring(0, msg.length - 1);
-            console.log('im-', imcompleteTrans)
-            console.log('sub-',msg.substring(0, msg.length - 1))
             lastTrans.classList.remove('partial');
             lastTrans = document.createElement('span');
             lastTrans.classList.add('partial');
@@ -109,7 +107,7 @@ function start() {
             console.log("http://"+location.host.substring(0,9)+":8888/predict")
                 fetch("http://"+location.host.substring(0,9)+":8888/predict", {
                 body: JSON.stringify({
-                    text: transcriptionOutput.innerText,
+                    text: imcompleteTrans,
                 }),
                 headers: {
                     'Content-Type': 'application/json'
