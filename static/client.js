@@ -101,6 +101,7 @@ function start() {
         var msg = evt.data;
         if (msg.endsWith('\n')) {
             lastTrans.innerText = imcompleteTrans + msg.substring(0, msg.length - 1);
+            console.log('im', imcompleteTrans, msg.substring(0, msg.length - 1))
             lastTrans.classList.remove('partial');
             lastTrans = document.createElement('span');
             lastTrans.classList.add('partial');

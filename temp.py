@@ -3,7 +3,7 @@ from queue import Queue
 from time import sleep
 from threading import Thread
 from flask import Flask, request, render_template, redirect, url_for, jsonify, abort
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 command_queue = Queue()
 
 initial = False
@@ -36,19 +36,21 @@ def socketServer(command_queue, isStop, HOST = '', PORT = 8989):
     print(f"socketServer Stopped {s}")
 
 def init():
-  print('init jaa')
   isStop = False
   socketServerThread = Thread(target=socketServer, args=(command_queue, lambda: isStop))
   socketServerThread.start()
 
 app = Flask(__name__)
-# cors = CORS(app)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
+
 @app.route('/')
 def index():
     init()
     return 'index'
 
 @app.route('/predict', methods=['POST'])
+@cross_origin()
 def predict():
     text = request.json['text']
     print('txt', text, bytes(text, encoding='utf-8'))
