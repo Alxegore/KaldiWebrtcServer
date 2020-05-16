@@ -62,6 +62,7 @@ function negotiate() {
     }).then(function (response) {
         return response.json();
     }).then(function (answer) {
+        console.log('answer2', answer)
         console.log(answer.sdp);
         return pc.setRemoteDescription(answer);
     }).catch(function (e) {
