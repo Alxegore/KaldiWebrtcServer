@@ -60,6 +60,7 @@ function negotiate() {
             method: 'POST'
         });
     }).then(function (response) {
+        console.log('response', response)
         return response.json();
     }).then(function (answer) {
         console.log('answer2', answer)
@@ -88,7 +89,7 @@ function start() {
     dc = pc.createDataChannel('chat', parameters);
     dc.onclose = function () {
         clearInterval(dcInterval);
-        console.log('Closed data channel');
+        console.log('Closed data channel jaa');
         btn_show_start();
     };
     dc.onopen = function () {
@@ -103,6 +104,7 @@ function start() {
             lastTrans = document.createElement('span');
             lastTrans.classList.add('partial');
             lastTrans.innerText = '...';
+            console.log('eq' , transcriptionOutput, lastTrans)
             transcriptionOutput.appendChild(lastTrans);
 
             imcompleteTrans = '';
