@@ -27,7 +27,6 @@ async def index(request):
     content = open(str(ROOT / 'static' / 'index.html')).read()
     return web.Response(content_type='text/html', text=content)
 
-
 async def offer(request):
     kaldi_server = await kaldi_server_queue.get()
     if not kaldi_server:
