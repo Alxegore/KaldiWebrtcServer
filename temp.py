@@ -3,8 +3,10 @@ from queue import Queue
 from time import sleep
 from threading import Thread
 from flask import Flask, request, render_template, redirect, url_for, jsonify, abort
-# from flask_cors import CORS
+from flask_cors import CORS
 command_queue = Queue()
+
+initial = False
 
 def socketServer(command_queue, isStop, HOST = '', PORT = 8989):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -54,4 +56,4 @@ def predict():
     return jsonify({'predict': text})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='localhost', port=8888,debug=True)

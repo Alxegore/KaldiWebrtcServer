@@ -106,15 +106,16 @@ function start() {
             lastTrans.classList.add('partial');
             lastTrans.innerText = '...';
             console.log('eq' , transcriptionOutput.innerText, lastTrans)
-            fetch('http://127.0.0.1:5000/predict', {
-            body: JSON.stringify({
-                text: transcriptionOutput.innerText,
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST'
-        })
+            console.log("http://"+location.host.substring(0,9)+":8888/predict")
+                fetch("http://"+location.host.substring(0,9)+":8888/predict", {
+                body: JSON.stringify({
+                    text: transcriptionOutput.innerText,
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'POST'
+            })
             transcriptionOutput.appendChild(lastTrans);
 
             imcompleteTrans = '';
