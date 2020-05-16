@@ -96,6 +96,7 @@ function start() {
         console.log('Opened data channel');
     };
     dc.onmessage = function (evt) {
+        console.log('evt', evt)
         statusField.innerText = 'Listening...';
         var msg = evt.data;
         if (msg.endsWith('\n')) {
@@ -104,7 +105,7 @@ function start() {
             lastTrans = document.createElement('span');
             lastTrans.classList.add('partial');
             lastTrans.innerText = '...';
-            console.log('eq' , transcriptionOutput, lastTrans)
+            console.log('eq' , transcriptionOutput.innerText, lastTrans)
             transcriptionOutput.appendChild(lastTrans);
 
             imcompleteTrans = '';

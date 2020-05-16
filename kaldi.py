@@ -66,7 +66,9 @@ class KaldiSink:
                 frame = await self.__track.recv()
                 frame = self.__resampler.resample(frame)
                 data = frame.to_ndarray()
-                self.__kaldi_writer.write(data.tobytes())
+                data2 = data.tobytes()
+                print('data2', data2)
+                self.__kaldi_writer.write(data2)
                 await self.__kaldi_writer.drain() #without this we won't catch any write exceptions
             except:
                 self.__kaldi_writer.close()
@@ -79,6 +81,7 @@ class KaldiSink:
         # since the above token doesn't end with \n it will be erased once Kaldi recognizes something
         while True:
             a = await self.__kaldi_reader.read(256)
+            print('kaldi', str(a, encoding='utf-8'))
             self.__channel.send(str(a, encoding='utf-8'))
 
 
