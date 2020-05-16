@@ -61,8 +61,8 @@ async def offer(request):
             await kaldi.stop()
 
     await pc.setRemoteDescription(offer)
-    print('answer1', answer)
     answer = await pc.createAnswer()
+    print('answer1', answer)
     await pc.setLocalDescription(answer)
 
     await kaldi.start()

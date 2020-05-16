@@ -3,7 +3,7 @@ services:
   kaldi:
     image: "danijel3/kaldi-online-tcp:aspire"
   web:
-    image: "danijel3/kaldi-webrtc"
+    image: "alxegore/sds"
     volumes:
       - ${PWD}/servers.json:/server/servers.json
     ports:
