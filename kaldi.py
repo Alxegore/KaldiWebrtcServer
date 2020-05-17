@@ -32,10 +32,10 @@ class KaldiSink:
         self.__channel = None
 
         self.__command = list()
-        with open('/server/command.txt', 'r') as file:
-            for line in file:
-                self.__command.append(line.strip().split())
-        print(self.__command)
+        # with open('/server/command.txt', 'r') as file:
+        #     for line in file:
+        #         self.__command.append(line.strip().split())
+        # print(self.__command)
 
     async def set_audio_track(self, track):
         self.__track = track
@@ -124,8 +124,15 @@ class KaldiSink:
             print(a)
             print('kaldi', str(a, encoding='utf-8'))
             t = str(a, encoding='utf-8').split(' ')
-            print(t, self.__command)
-            b, d = __find_best_match(t, self.__command)
+
+            print(t)
+            __command = list()
+            with open('/server/command.txt', 'r') as file:
+            for line in file:
+                __command.append(line.strip().split())
+            print(__command)
+
+            b, d = __find_best_match(t, __command)
             print('kaldi res', (' ').join(b))
             self.__channel.send((' ').join(b))
 

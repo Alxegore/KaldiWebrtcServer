@@ -42,8 +42,9 @@ def find_best_match(test , all_command):
             mn = distance
             best_match = cmd
     return best_match, distance
-
-t = 'โอม เดิน หน้า \r'.split(' ')
+x= str(b'\xe0\xb8\x95\xe0\xb8\xb1\xe0\xb8\x81\xe0\xb8\xa5\xe0\xb8\xb2\xe0\xb8\xa7\xe0\xb8\xb2 \r', encoding='utf-8')
+print(x)
+t = x.split(' ')
 b, d = find_best_match(t, command)
 print('test :', t)
 print('predict :', (' ').join(b))
