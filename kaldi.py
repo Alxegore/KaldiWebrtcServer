@@ -124,8 +124,8 @@ class KaldiSink:
             print(a)
             print('kaldi', str(a, encoding='utf-8'))
             t = str(a, encoding='utf-8').split(' ')
-            print(t)
-            b, d = self.__find_best_match(t, self.__command)
+            print(t, self.__command)
+            b, d = __find_best_match(t, self.__command)
             print('kaldi res', (' ').join(b))
             self.__channel.send((' ').join(b))
 
