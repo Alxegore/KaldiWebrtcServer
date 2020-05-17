@@ -1,5 +1,6 @@
 import json
 import logging
+import numpy as np
 from asyncio import create_task, Lock, open_connection, wait_for, sleep
 
 from av.audio.resampler import AudioResampler
@@ -74,14 +75,76 @@ class KaldiSink:
                 await self.__ks.free()
                 return
 
+    command = list()
+    with open('command.txt', 'r') as file:
+        for line in file:
+            command.append(line.strip().split())
+
+    id2text = dict()
+    with open('HW4_transcript.txt', 'r') as file:
+        for line in file:
+            temp = line.strip().split()
+            id2text[temp[0]] = temp[1:]
+    id2text['0000'] = ['โกวาจี']
+            
+    label = list()
+    test = list()
+    with open('answer.txt', 'r') as file:
+        for line in file:
+            temp = line.strip().split()
+            text = id2text[temp[0].split('_')[1]]
+            test.append(temp[1:])
+            label.append(text)
+            
+    words = set()
+    for cmd in command:
+        for w in cmd:
+            words.add(w)
+
+    def dist(x, y):
+        if x == y: return 0
+        elif x[0] == y[0]: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.25 + 0.5
+        else: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.5 + 0.5
+
+    def DTW(s1, s2):
+        
+        arr = np.zeros((len(s1) + 1, len(s2) + 1))
+        arr[:, :] = np.inf
+        for i in range(1, len(s1) + 1):
+            for j in range(1, len(s2) + 1):
+                row = i - 1
+                col = j - 1
+                if i == 1 and j == 1:
+                    arr[i, j] = dist(s1[row], s2[col])
+                    continue
+                    
+                arr[i, j] = min(arr[i, j-1] + dist(s1[row],s2[col]),\
+                                arr[i-1, j-1] + 2*dist(s1[row],s2[col]),\
+                                arr[i-1, j] + dist(s1[row],s2[col]))
+        
+        return arr[-1, -1]
+
+    def find_best_match(test , all_command):
+        mn = np.inf
+        best_match = ''
+        for cmd in all_command:
+            distance = DTW(cmd, test)
+            if mn > distance:
+                mn = distance
+                best_match = cmd
+        return best_match, distance
     async def __run_text_xfer(self):
         await sleep(1) # this is useful to
         self.__channel.send('<s>\r') # this is only sent to inform the web UI we are ready to send data
         # since the above token doesn't end with \n it will be erased once Kaldi recognizes something
         while True:
             a = await self.__kaldi_reader.read(256)
+
             print('kaldi', str(a, encoding='utf-8'))
-            self.__channel.send(str(a, encoding='utf-8'))
+            t = str(a, encoding='utf-8').split(' ')
+            b, d = find_best_match(t, command)
+            print('kaldi res', (' ').join(b))
+            self.__channel.send((' ').join(b))
 
 
 class KaldiServer:
