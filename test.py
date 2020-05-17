@@ -43,7 +43,7 @@ def find_best_match(test , all_command):
             best_match = cmd
     return best_match, distance
 
-t = 'โอม เดิน หน้า'.split(' ')
+t = 'โอม เดิน หน้า \r'.split(' ')
 b, d = find_best_match(t, command)
 print('test :', t)
 print('predict :', (' ').join(b))

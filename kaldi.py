@@ -108,6 +108,7 @@ class KaldiSink:
         mn = np.inf
         best_match = ''
         for cmd in all_command:
+            print('test', cmd)
             distance = DTW(cmd, test)
             if mn > distance:
                 mn = distance
@@ -124,7 +125,7 @@ class KaldiSink:
             print('kaldi', str(a, encoding='utf-8'))
             t = str(a, encoding='utf-8').split(' ')
             print(t)
-            b, d = find_best_match(t, self.__command)
+            b, d = self.__find_best_match(t, self.__command)
             print('kaldi res', (' ').join(b))
             self.__channel.send((' ').join(b))
 
