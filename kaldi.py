@@ -97,12 +97,12 @@ class KaldiSink:
                 row = i - 1
                 col = j - 1
                 if i == 1 and j == 1:
-                    arr[i, j] = self.dist(s1[row], s2[col])
+                    arr[i, j] = dist(s1[row], s2[col])
                     continue
                     
-                arr[i, j] = min(arr[i, j-1] + self.dist(s1[row],s2[col]),\
-                                arr[i-1, j-1] + 2*self.dist(s1[row],s2[col]),\
-                                arr[i-1, j] + self.dist(s1[row],s2[col]))
+                arr[i, j] = min(arr[i, j-1] + dist(s1[row],s2[col]),\
+                                arr[i-1, j-1] + 2*dist(s1[row],s2[col]),\
+                                arr[i-1, j] + dist(s1[row],s2[col]))
         
         return arr[-1, -1]
 
@@ -112,7 +112,7 @@ class KaldiSink:
         best_match = ''
         for cmd in all_command:
             print('test', cmd)
-            distance = self.DTW(cmd, test)
+            distance = DTW(cmd, test)
             if mn > distance:
                 mn = distance
                 best_match = cmd

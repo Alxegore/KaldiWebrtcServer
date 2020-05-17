@@ -52,20 +52,51 @@ print('predict :', (' ').join(b))
 import math
 
 class Pizza:
-    def __init__(self, radius, ingredients):
-        self.radius = radius
-        self.ingredients = ingredients
-
-    def __repr__(self):
-        return (f'Pizza({self.radius!r}, '
-                f'{self.ingredients!r})')
-
-    def area(self):
-        return self.circle_area(self.radius)
+    def __init__(self):
+        self.__command = list()
+        with open('command.txt', 'r') as file:
+            for line in file:
+                self.__command.append(line.strip().split())
+        print(self.__command)
 
     @staticmethod
-    def circle_area(self, r):
-        return r ** 2 * math.pi
+    def dist(x, y):
+        if x == y: return 0
+        elif x[0] == y[0]: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.25 + 0.5
+        else: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.5 + 0.5
 
-p = Pizza(4, ['mozzarella', 'tomatoes'])
-print(p.circle_area(4))
+    @staticmethod
+    def DTW(s1, s2):
+        arr = np.zeros((len(s1) + 1, len(s2) + 1))
+        arr[:, :] = np.inf
+        for i in range(1, len(s1) + 1):
+            for j in range(1, len(s2) + 1):
+                row = i - 1
+                col = j - 1
+                if i == 1 and j == 1:
+                    arr[i, j] = dist(s1[row], s2[col])
+                    continue
+                    
+                arr[i, j] = min(arr[i, j-1] + dist(s1[row],s2[col]),\
+                                arr[i-1, j-1] + 2*dist(s1[row],s2[col]),\
+                                arr[i-1, j] + dist(s1[row],s2[col]))
+        return arr[-1, -1]
+
+    @staticmethod
+    def __find_best_match(test , all_command):
+        mn = np.inf
+        best_match = ''
+        for cmd in all_command:
+            print('test', cmd)
+            distance = DTW(cmd, test)
+            if mn > distance:
+                mn = distance
+                best_match = cmd
+        return best_match, distance
+
+    def circle_area(self, t):
+        b, d = self.__find_best_match(t, self.__command)
+        return  (' ').join(b)
+
+p = Pizza()
+print(p.circle_area(t))
