@@ -32,10 +32,10 @@ class KaldiSink:
         self.__channel = None
 
         self.__command = list()
-        # with open('/server/command.txt', 'r') as file:
-        #     for line in file:
-        #         self.__command.append(line.strip().split())
-        # print(self.__command)
+        with open('/server/command.txt', 'r') as file:
+            for line in file:
+                self.__command.append(line.strip().split())
+        print(self.__command)
 
     async def set_audio_track(self, track):
         self.__track = track
@@ -81,11 +81,13 @@ class KaldiSink:
                 await self.__ks.free()
                 return
 
+    @staticmethod
     def dist(x, y):
         if x == y: return 0
         elif x[0] == y[0]: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.25 + 0.5
         else: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.5 + 0.5
 
+    @staticmethod
     def DTW(s1, s2):
         
         arr = np.zeros((len(s1) + 1, len(s2) + 1))
@@ -95,21 +97,22 @@ class KaldiSink:
                 row = i - 1
                 col = j - 1
                 if i == 1 and j == 1:
-                    arr[i, j] = dist(s1[row], s2[col])
+                    arr[i, j] = self.dist(s1[row], s2[col])
                     continue
                     
-                arr[i, j] = min(arr[i, j-1] + dist(s1[row],s2[col]),\
-                                arr[i-1, j-1] + 2*dist(s1[row],s2[col]),\
-                                arr[i-1, j] + dist(s1[row],s2[col]))
+                arr[i, j] = min(arr[i, j-1] + self.dist(s1[row],s2[col]),\
+                                arr[i-1, j-1] + 2*self.dist(s1[row],s2[col]),\
+                                arr[i-1, j] + self.dist(s1[row],s2[col]))
         
         return arr[-1, -1]
 
+    @staticmethod
     def __find_best_match(test , all_command):
         mn = np.inf
         best_match = ''
         for cmd in all_command:
             print('test', cmd)
-            distance = DTW(cmd, test)
+            distance = self.DTW(cmd, test)
             if mn > distance:
                 mn = distance
                 best_match = cmd
@@ -126,13 +129,9 @@ class KaldiSink:
             t = str(a, encoding='utf-8').split(' ')
 
             print('after split',t)
-            __command = list()
-            with open('/server/command.txt', 'r') as file:
-                for line in file:
-                    __command.append(line.strip().split())
-            print(__command)
-
-            b, d = __find_best_match(t, __command)
+            print(self.__command)
+            
+            b, d = self.__find_best_match(t, self.__command)
             print('kaldi res', (' ').join(b))
             self.__channel.send((' ').join(b))
 
