@@ -31,6 +31,12 @@ class KaldiSink:
 
         self.__channel = None
 
+        self.__command = list()
+        with open('/server/command.txt', 'r') as file:
+            for line in file:
+                self.__command.append(line.strip().split())
+        print(self.__command)
+
     async def set_audio_track(self, track):
         self.__track = track
 
@@ -75,32 +81,6 @@ class KaldiSink:
                 await self.__ks.free()
                 return
 
-    command = list()
-    with open('/server/command.txt', 'r') as file:
-        for line in file:
-            command.append(line.strip().split())
-
-    id2text = dict()
-    with open('/server/HW4_transcript.txt', 'r') as file:
-        for line in file:
-            temp = line.strip().split()
-            id2text[temp[0]] = temp[1:]
-    id2text['0000'] = ['โกวาจี']
-            
-    label = list()
-    test = list()
-    with open('/server/answer.txt', 'r') as file:
-        for line in file:
-            temp = line.strip().split()
-            text = id2text[temp[0].split('_')[1]]
-            test.append(temp[1:])
-            label.append(text)
-            
-    words = set()
-    for cmd in command:
-        for w in cmd:
-            words.add(w)
-
     def dist(x, y):
         if x == y: return 0
         elif x[0] == y[0]: return abs(len(x) - len(y)) / (len(x) + len(y)) * 0.25 + 0.5
@@ -124,7 +104,7 @@ class KaldiSink:
         
         return arr[-1, -1]
 
-    def find_best_match(test , all_command):
+    def __find_best_match(test , all_command):
         mn = np.inf
         best_match = ''
         for cmd in all_command:
@@ -140,9 +120,11 @@ class KaldiSink:
         while True:
             a = await self.__kaldi_reader.read(256)
 
+            print(a)
             print('kaldi', str(a, encoding='utf-8'))
             t = str(a, encoding='utf-8').split(' ')
-            b, d = find_best_match(t, command)
+            print(t)
+            b, d = find_best_match(t, self.__command)
             print('kaldi res', (' ').join(b))
             self.__channel.send((' ').join(b))
 

@@ -4,22 +4,6 @@ command = list()
 with open('command.txt', 'r') as file:
     for line in file:
          command.append(line.strip().split())
-
-id2text = dict()
-with open('HW4_transcript.txt', 'r') as file:
-    for line in file:
-        temp = line.strip().split()
-        id2text[temp[0]] = temp[1:]
-id2text['0000'] = ['โกวาจี']
-        
-label = list()
-test = list()
-with open('answer.txt', 'r') as file:
-    for line in file:
-        temp = line.strip().split()
-        text = id2text[temp[0].split('_')[1]]
-        test.append(temp[1:])
-        label.append(text)
         
 words = set()
 for cmd in command:
