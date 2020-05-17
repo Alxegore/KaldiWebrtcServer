@@ -76,12 +76,12 @@ class KaldiSink:
                 return
 
     command = list()
-    with open('command.txt', 'r') as file:
+    with open('/server/command.txt', 'r') as file:
         for line in file:
             command.append(line.strip().split())
 
     id2text = dict()
-    with open('HW4_transcript.txt', 'r') as file:
+    with open('/server/HW4_transcript.txt', 'r') as file:
         for line in file:
             temp = line.strip().split()
             id2text[temp[0]] = temp[1:]
@@ -89,7 +89,7 @@ class KaldiSink:
             
     label = list()
     test = list()
-    with open('answer.txt', 'r') as file:
+    with open('/server/answer.txt', 'r') as file:
         for line in file:
             temp = line.strip().split()
             text = id2text[temp[0].split('_')[1]]
