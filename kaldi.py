@@ -125,11 +125,11 @@ class KaldiSink:
             print('kaldi', str(a, encoding='utf-8'))
             t = str(a, encoding='utf-8').split(' ')
 
-            print(t)
+            print('after split',t)
             __command = list()
             with open('/server/command.txt', 'r') as file:
-            for line in file:
-                __command.append(line.strip().split())
+                for line in file:
+                    __command.append(line.strip().split())
             print(__command)
 
             b, d = __find_best_match(t, __command)
