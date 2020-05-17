@@ -117,6 +117,7 @@ class KaldiSink:
                 mn = distance
                 best_match = cmd
         return best_match, distance
+
     async def __run_text_xfer(self):
         await sleep(1) # this is useful to
         self.__channel.send('<s>\r') # this is only sent to inform the web UI we are ready to send data
@@ -129,11 +130,10 @@ class KaldiSink:
             t = str(a, encoding='utf-8').split(' ')
 
             print('after split',t)
-            print(self.__command)
             
-            b, d = self.__find_best_match(t, self.__command)
-            print('kaldi res', (' ').join(b))
-            self.__channel.send((' ').join(b))
+            # b, d = self.__find_best_match(t, self.__command)
+            # print('kaldi res', (' ').join(b))
+            self.__channel.send(str(a, encoding='utf-8'))
 
 
 class KaldiServer:

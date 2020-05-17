@@ -87,7 +87,6 @@ class Pizza:
         mn = np.inf
         best_match = ''
         for cmd in all_command:
-            print('test', cmd)
             distance = DTW(cmd, test)
             if mn > distance:
                 mn = distance
@@ -95,6 +94,7 @@ class Pizza:
         return best_match, distance
 
     def circle_area(self, t):
+        print(self.__command)
         b, d = self.__find_best_match(t, self.__command)
         return  (' ').join(b)
 
